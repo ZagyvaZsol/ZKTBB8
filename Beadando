@@ -1,0 +1,101 @@
+#!/bin/bash
+
+clear 
+
+echo "In this program you can download an image if you enter the url and"
+echo "Resize them later"
+
+echo "For help : -h"
+
+function HELP {
+
+clear
+echo "-d"
+
+echo "	With this command you choose the downloading function"
+echo "	You have to enter a new folder name"
+echo "	And what name do you want to save the image"
+echo "	After that paste in the url and downloading begins"
+
+echo "-c"
+
+echo "	With this command you choose the convert function"
+echo "	The picture that you convert has to be in the programs directory"
+echo "	You can choose beetween 3 resolution"
+echo "	1920x1080, 200x100,100x100"
+echo "	The program uses imagemagick to resize the images"
+}
+
+function DOWNLOAD() {
+    clear
+
+    echo "Type int the name of the new folder"
+    read folder
+
+    mkdir $folder
+    cd $folder
+
+    echo "Type in the name of the picture"
+    read image
+
+    echo "Type in the url"
+    read url
+
+    wget -O $image $url
+
+    clear 
+
+    echo "You succesfully downloaded the image"
+}
+
+function CONVERT() {
+
+clear
+
+echo "Enter the name of the folder where the picture is"
+read FOLDER
+cd $FOLDER
+
+echo "Type in the name of the image"
+read imagename
+
+echo "Choose beetween the resolutions"
+
+echo "200x100 (1)"
+echo "1920x1080 (2)"
+echo "100x100 (3)"
+
+echo "Type in what you want (the number after them)"
+read number
+
+echo "Type in the name of the output file"
+read output
+
+case $number in
+
+    1)
+    convert $imagename -resize 200x100! $output
+    ;;
+    2)
+    convert $imagename -resize 1920x1080! $output
+    ;;
+    3)
+    convert $imagename -resize 100x100! $output
+    ;;
+esac
+
+}
+
+while getopts :hdc Flag; do
+    case $Flag in
+    h)
+	HELP
+	;;
+    d)
+	DOWNLOAD
+	;;
+    c)
+	CONVERT
+	;;
+    esac
+  done
